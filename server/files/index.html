@@ -6,7 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies!</title>
     <style>
-        /* Part 3: Your styling goes here */
+        body {
+        font-family: 'Trebuchet MS', sans-serif;
+        background-color: #6c0000;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        }
+
+        #container {
+        max-width: 800px;
+        margin: 0 auto;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        article {
+            background-color: #b4bbffdc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            max-width: 700px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        img {
+            border-radius: 10px;
+            max-width: 200px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+        span {
+            margin-right: 5px;
+        }
+        .genre {
+            background-color: #ff0000;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 0.9em;
+        }
     </style>
     <script>
         function reverseString(s) {
@@ -16,10 +64,84 @@
         window.onload = function () {
             const xhr = new XMLHttpRequest()
             xhr.onload = function () {
-                const bodyElement = document.querySelector("body")
+                const bodyElement = document.querySelector("#container")
                 if (xhr.status == 200) {
-		            /* Part 2: Build the HTML elements here and append them to the body */ 
-                    bodyElement.append(reverseString(xhr.responseText))
+		            /* Part 2: Build the HTML elements here and append them to the body */
+                      const movies = JSON.parse(xhr.responseText)
+
+           
+            movies.forEach(movie => {
+                
+                const article = document.createElement("article")
+                article.style.border = "1px solid #ccc"
+                article.style.padding = "10px"
+                article.style.margin = "10px 0"
+                article.style.maxWidth = "600px"
+
+               
+                const title = document.createElement("h2")
+                title.textContent = movie.Title
+                article.appendChild(title)
+
+               
+                const poster = document.createElement("img")
+                poster.src = movie.Poster
+                poster.alt = `Poster of ${movie.Title}`
+                poster.style.maxWidth = "200px"
+                article.appendChild(poster)
+
+                
+                const details = document.createElement("ul")
+
+                const released = document.createElement("li")
+                released.textContent = `Released: ${movie.Released}`
+                details.appendChild(released)
+
+                const runtime = document.createElement("li")
+                runtime.textContent = `Runtime: ${movie.Runtime} min`
+                details.appendChild(runtime)
+
+                const genres = document.createElement("li")
+                genres.textContent = "Genres: "
+
+                movie.Genres.forEach(g => {
+                    const span = document.createElement("span")
+                    span.className = "genre"
+                    span.textContent = g
+                    genres.appendChild(span)
+                })
+
+                details.appendChild(genres)
+
+                const directors = document.createElement("li")
+                directors.textContent = `Directors: ${movie.Directors.join(", ")}`
+                details.appendChild(directors)
+
+                const writers = document.createElement("li")
+                writers.textContent = `Writers: ${movie.Writers.join(", ")}`
+                details.appendChild(writers)
+
+                const actors = document.createElement("li")
+                actors.textContent = `Actors: ${movie.Actors.join(", ")}`
+                details.appendChild(actors)
+
+                const plot = document.createElement("li")
+                plot.textContent = `Plot: ${movie.Plot}`
+                details.appendChild(plot)
+
+                const metascore = document.createElement("li")
+                metascore.textContent = `Metascore: ${movie.Metascore}`
+                details.appendChild(metascore)
+
+                const rating = document.createElement("li")
+                rating.textContent = `IMDb Rating: ${movie.imdbRating}`
+                details.appendChild(rating)
+
+                article.appendChild(details)
+
+                
+                bodyElement.appendChild(article)
+            })
                 } else {
                     bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
                 }
@@ -32,6 +154,7 @@
 </head>
 
 <body>
+    <div id="container"></div>
 </body>
 
 </html>
